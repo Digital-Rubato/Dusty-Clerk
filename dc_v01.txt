@@ -1,0 +1,65 @@
+"""
+# Directions and Next Ups
+
+Add User inputs -> 
+Append inputs to dict ->
+Make sure all appended item dict prints to excel
+
+
+""" 
+
+import pandas as pd
+
+from openpyxl import load_workbook
+
+""" Dict Space """
+
+
+table = {	
+	'Name': ['A', 'B', 'C', 'D'],
+	'Age': [10, 0, 30, 50],
+	'Product_ID': []
+	}
+
+""" Input Logic """
+
+
+b_code = input("Input your barcode: ")
+
+table['Product_ID'].append(b_code)
+
+print(table)
+
+
+
+""" Main Excel Logic """
+
+#writing to demo.xslx and using xlsxwriter 'engine'
+writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
+
+print("Adding bulk data")
+
+#dataframe name and age columns
+df = pd.DataFrame(table)
+print("Bulk Data Added")
+
+#convert DataFrame to excel object
+print("Inputting bulk data")
+
+df.to_excel(writer, sheet_name='Sheet1', index=False)
+
+#Saving and writing data
+print("Saving")
+
+writer.save()
+
+print("Save Complete")
+
+#read the data to check
+
+print("Playback enabled")
+
+reader = pd.read_excel(r'demo.xlsx')
+
+print(reader)
+print("Playback complete")

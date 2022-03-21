@@ -3,10 +3,16 @@
 
 Add User inputs -> 
 Append inputs to dict ->
-Make sure all appended item dict prints to excel
+Make sure all appended item dict prints to excel ->
 
 
 """ 
+
+""" Current Issues:
+
+
+
+"""
 
 import pandas as pd
 
@@ -18,7 +24,7 @@ from openpyxl import load_workbook
 table = {	
 	'Name': ['A', 'B', 'C', 'D'],
 	'Age': [10, 0, 30, 50],
-	'Product_ID': []
+	'p_id': []
 	}
 
 """ Input Logic """
@@ -26,7 +32,7 @@ table = {
 
 b_code = input("Input your barcode: ")
 
-table['Product_ID'].append(b_code)
+table.update({'p_id': b_code})
 
 print(table)
 

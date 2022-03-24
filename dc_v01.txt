@@ -45,14 +45,18 @@ print(table)
 """
 
 """ Gui Logic """
+#Variable Space
+
+gui_input = sg.InputText()
 
 #layout window
 
 layout = [
 	[sg.Text('Dusty Clerk')],
-	[sg.Text('Enter your barcode'), sg.InputText()],
+	[sg.Text('Enter your barcode'), gui_input],
 	[sg.Button('OK'), sg.Button('Quit')]
 	]
+
 
 #Window Initialization
 window = sg.Window('Dusty Clerk', layout)

@@ -1,16 +1,16 @@
 """
 # Directions and Next Ups
 
-Add User inputs -> 
+With Gui add:
+User inputs -> 
 Append inputs to dict ->
-Make sure all appended item dict prints to excel ->
-
+Make sure all appended items in dict prints to excel ->
 
 """ 
 
-""" Current Issues:
+""" Current Issues: 
 
-
+None
 
 """
 
@@ -18,24 +18,53 @@ import pandas as pd
 
 from openpyxl import load_workbook
 
-""" Dict Space """
+import PySimpleGUI as sg
 
+""" Data Space """
 
-table = {	
-	'Name': ['A', 'B', 'C', 'D'],
-	'Age': [10, 0, 30, 50],
-	'p_id': []
-	}
+bc_list = []
 
-""" Input Logic """
+table = {}
+
+""" Input Logic 
 
 
 b_code = input("Input your barcode: ")
 
-table.update({'p_id': b_code})
+bc_list.append(b_code)
 
+t_code = input("Second barcode: ")
+
+bc_list.append(t_code)
+
+# add bc_list as values to dict: table and key: 'p_id'
+table['Product ID'] = bc_list
+
+print("Inputs complete. Assembling table.")
 print(table)
+"""
 
+""" Gui Logic """
+
+#layout window
+
+layout = [
+	[sg.Text('Dusty Clerk')],
+	[sg.Text('Enter your barcode'), sg.InputText()],
+	[sg.Button('OK'), sg.Button('Quit')]
+	]
+
+#Window Initialization
+window = sg.Window('Dusty Clerk', layout)
+
+#While loop to process 'events' and recieve values of the inputs
+while True:
+	event, values = window.read()
+	if event == sg.WIN_CLOSED or event == 'Quit': 
+		break
+	print('You entered ', values[0])
+
+window.close()
 
 
 """ Main Excel Logic """

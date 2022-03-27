@@ -24,7 +24,9 @@ import PySimpleGUI as sg
 
 bc_list = []
 
-table = {}
+transfer = []
+
+cl = {}
 
 """ Input Logic 
 
@@ -47,13 +49,11 @@ print(table)
 """ Gui Logic """
 #Variable Space
 
-gui_input = sg.InputText()
-
 #layout window
 
 layout = [
 	[sg.Text('Dusty Clerk')],
-	[sg.Text('Enter your barcode'), gui_input],
+	[sg.Text('Enter your barcode'), sg.InputText()],
 	[sg.Button('OK'), sg.Button('Quit')]
 	]
 
@@ -62,14 +62,21 @@ layout = [
 window = sg.Window('Dusty Clerk', layout)
 
 #While loop to process 'events' and recieve values of the inputs
+
 while True:
 	event, values = window.read()
 	if event == sg.WIN_CLOSED or event == 'Quit': 
 		break
-	print('You entered ', values[0])
+	transfer.append(values[0])
+	print(transfer)
 
 window.close()
 
+
+#add transfered values to dict
+
+cl['Product ID'] = transfer
+cl['Barcode'] = transfer
 
 """ Main Excel Logic """
 
@@ -79,7 +86,7 @@ writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
 print("Adding bulk data")
 
 #dataframe name and age columns
-df = pd.DataFrame(table)
+df = pd.DataFrame(cl)
 print("Bulk Data Added")
 
 #convert DataFrame to excel object

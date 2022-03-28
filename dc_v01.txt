@@ -2,10 +2,24 @@
 # Directions and Next Ups
 
 With Gui add:
-User inputs -> 
-Append inputs to dict ->
-Make sure all appended items in dict prints to excel ->
 
+done?:
+add barcode font styling
+
+done:
+Add second input detailing the item ->
+Second input to same dict ->
+
+Sprucing:
+pressing ok clears and saves the barcode input line ->
+add enter/return button functionality instead of pressing ok->
+add visible data window->
+add remove / delete button ->
+
+Excel styling:
+
+Expand columns and rows ->
+Style them
 """ 
 
 """ Current Issues: 
@@ -16,15 +30,21 @@ None
 
 import pandas as pd
 
+from pandas.io.formats.style import Styler
+
 from openpyxl import load_workbook
 
 import PySimpleGUI as sg
 
+
+
 """ Data Space """
 
-bc_list = []
+bc_style = []
 
 transfer = []
+
+item = []
 
 cl = {}
 
@@ -54,6 +74,7 @@ print(table)
 layout = [
 	[sg.Text('Dusty Clerk')],
 	[sg.Text('Enter your barcode'), sg.InputText()],
+	[sg.Text('Item Details'), sg.InputText()],
 	[sg.Button('OK'), sg.Button('Quit')]
 	]
 
@@ -68,7 +89,10 @@ while True:
 	if event == sg.WIN_CLOSED or event == 'Quit': 
 		break
 	transfer.append(values[0])
+	bc_style.append(f'*{values[0]}*')
+	item.append(values[1])
 	print(transfer)
+	print(item)
 
 window.close()
 
@@ -76,7 +100,8 @@ window.close()
 #add transfered values to dict
 
 cl['Product ID'] = transfer
-cl['Barcode'] = transfer
+cl['Barcode'] = bc_style
+cl['Item Description'] = item
 
 """ Main Excel Logic """
 
@@ -88,6 +113,19 @@ print("Adding bulk data")
 #dataframe name and age columns
 df = pd.DataFrame(cl)
 print("Bulk Data Added")
+
+#styling DataFrame
+print("styling dataframe")
+def barcode_font(x):
+
+	df = x.copy()
+
+	df[['Barcode']] = 'font-family: Free 3 of 9'
+	
+	return df
+df.style.apply(barcode_font, axis = None)
+
+print("style finished")
 
 #convert DataFrame to excel object
 print("Inputting bulk data")

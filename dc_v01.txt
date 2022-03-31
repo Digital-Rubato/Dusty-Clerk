@@ -2,12 +2,13 @@
 # Directions and Next Ups
 
 With Gui add:
-pressing ok or enter clears and saves the barcode input line ->
+pressing ok or enter clears and saves the item description input line ->
 
 done:
 Add second input detailing the item ->
 Second input to same dict ->
 add enter/return button functionality instead of pressing ok->
+save and export feature->
 
 Sprucing:
 add visible data window->
@@ -16,7 +17,8 @@ add remove / delete button ->
 Excel styling:
 
 Expand columns and rows ->
-Style them
+Style them ->
+
 """ 
 
 """ Current Issues: 
@@ -28,6 +30,8 @@ did my code actually add barcode font styling???
 import pandas as pd
 
 from pandas.io.formats.style import Styler
+
+import os
 
 from openpyxl import load_workbook
 
@@ -51,8 +55,8 @@ cl = {}
 layout = [
 	[sg.Text('Dusty Clerk')],
 	[sg.Text('Enter your barcode'), sg.InputText()],
-	[sg.Text('Item Details'), sg.InputText()],
-	[sg.Button('OK'), sg.Button('Exit and Export')],
+	[sg.Text('Item Details', size=(8,1)), sg.InputText()],
+	[sg.Button('Add'), sg.Button('Save', key='save'), sg.Button('Exit')],
 #adds invisible submit on enter press
 	[sg.Button('Submit', visible=False, bind_return_key=True)]
 	]
@@ -65,13 +69,23 @@ window = sg.Window('Dusty Clerk', layout)
 while True:
 	event, values = window.read()
 	
-	if event == sg.WIN_CLOSED or event == 'Exit and Export': 
+	if event == sg.WIN_CLOSED or event == 'Exit': 
 		break
-	transfer.append(values[0])
-	bc_style.append(f'*{values[0]}*')
-	item.append(values[1])
-	print(transfer)
-	print(item)
+	
+	if event == 'save':
+		foldername = sg.PopupGetFolder('', no_window=True)
+		filename = sg.PopupGetFile('Please enter a file name for your results')
+		pathname = os.path.join(foldername ,filename + '.xlsx')
+				
+		f = open(pathname, 'w')
+		f.close()
+	
+	if event == 'Add' or event == 'Submit':
+		transfer.append(values[0])
+		bc_style.append(f'*{values[0]}*')
+		item.append(values[1])
+		print(transfer)
+		print(item)
 
 window.close()
 
@@ -84,13 +98,13 @@ cl['Item Description'] = item
 """ Main Excel Logic """
 
 #writing to demo.xslx and using xlsxwriter 'engine'
-writer = pd.ExcelWriter('demo.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter(pathname, engine='xlsxwriter')
 
-print("Adding bulk data")
+print("saving to: ",pathname)
 
 #dataframe name and age columns
 df = pd.DataFrame(cl)
-print("Bulk Data Added")
+print("Data Added to: ", pathname)
 
 #styling DataFrame
 print("styling dataframe")
@@ -104,7 +118,7 @@ def barcode_font(x):
 	return df
 df.style.apply(barcode_font, axis = None)
 
-print("style finished")
+print("style complete")
 
 #convert DataFrame to excel object
 print("Inputting bulk data")

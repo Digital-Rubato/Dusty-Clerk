@@ -2,13 +2,14 @@
 # Directions and Next Ups
 
 With Gui add:
-pressing ok or enter clears and saves the item description input line ->
+
 
 done:
 Add second input detailing the item ->
 Second input to same dict ->
 add enter/return button functionality instead of pressing ok->
 save and export feature->
+pressing ok or enter clears and saves the item description input line ->
 
 Sprucing:
 add visible data window->
@@ -24,6 +25,8 @@ Style them ->
 """ Current Issues: 
 
 did my code actually add barcode font styling???
+
+why does my code dup values when powershell reads it back to me?
 
 """
 
@@ -54,7 +57,7 @@ cl = {}
 
 layout = [
 	[sg.Text('Dusty Clerk')],
-	[sg.Text('Enter your barcode'), sg.InputText()],
+	[sg.Text('Enter your barcode'), sg.InputText(do_not_clear=False)],
 	[sg.Text('Item Details', size=(8,1)), sg.InputText()],
 	[sg.Button('Add'), sg.Button('Save', key='save'), sg.Button('Exit')],
 #adds invisible submit on enter press
@@ -116,6 +119,7 @@ def barcode_font(x):
 	df[['Barcode']] = 'font-family: Free 3 of 9'
 	
 	return df
+
 df.style.apply(barcode_font, axis = None)
 
 print("style complete")

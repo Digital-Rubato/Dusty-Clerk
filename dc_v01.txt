@@ -54,6 +54,8 @@ item = []
 
 cl = {}
 
+pathname = ""
+
 """ Gui Logic """
 #Drop Down Menu
 menu_drop = [
@@ -67,31 +69,48 @@ layout = [
 	[sg.Text('Dusty Clerk')],
 	[sg.Text('Enter your barcode'), sg.InputText(do_not_clear=False)],
 	[sg.Text('Item Details', size=(8,1)), sg.InputText()],
-	[sg.Button('Add'), sg.Button('Save', key='save'), sg.Button('Exit')],
+	[sg.Button('Add'), sg.Button('Save', key='Save'), sg.Button('Exit')],
 #adds invisible submit on enter press
 	[sg.Button('Submit', visible=False, bind_return_key=True)]
 	]
 
 #Window Initialization
-window = sg.Window('Dusty Clerk', layout)
+window = sg.Window('Dusty Clerk', layout, element_justification='c')
+
+#save layout choice
+save_layout = [
+		[sg.Text('Would you like to save before quitting?')],
+		[sg.Button('Yes'), sg.Button('No')]
+		]
 
 #While loop to process 'events' and recieve values of the inputs
 
 while True:
 	event, values = window.read()
 	
-	if event == sg.WIN_CLOSED or event == 'Exit': 
-		
-		break
+	if event == sg.WIN_CLOSED or event == 'Exit':
+		print("i just wanna know",pathname)
+		if pathname == "":
+			save_window = sg.Window('Would you like to save?', save_layout, element_justification = 'c')
+			event, values = save_window.read()
+			
+			if event == 'Yes':
+				foldername = sg.PopupGetFolder('', no_window=True)
+				filename = sg.PopupGetFile('Please enter a file name for your results')
+				pathname = os.path.join(foldername, filename + '.xlsx')
+				f = open(pathname, 'w')
+				f.close()
+			else:
+				break
 	
-	if event == 'save':
+	if event == 'Save':
 		foldername = sg.PopupGetFolder('', no_window=True)
 		filename = sg.PopupGetFile('Please enter a file name for your results')
 		pathname = os.path.join(foldername ,filename + '.xlsx')
 				
 		f = open(pathname, 'w')
 		f.close()
-	
+		print("i just wanna know",pathname)
 	if event == 'Add' or event == 'Submit':
 		transfer.append(values[0])
 		bc_style.append(f'*{values[0]}*')

@@ -2,7 +2,8 @@
 # Directions and Next Ups
 
 With Gui add:
-
+Fix the styling for the barcode section(don't work)
+change 
 
 done:
 Add second input detailing the item ->
@@ -10,23 +11,26 @@ Second input to same dict ->
 add enter/return button functionality instead of pressing ok->
 save and export feature->
 pressing ok or enter clears and saves the item description input line ->
+added menu bar and drop down menu ->
+
 
 Sprucing:
 add visible data window->
 add remove / delete button ->
 
+
 Excel styling:
 
 Expand columns and rows ->
 Style them ->
+Add head liner description ->
+
 
 """ 
 
 """ Current Issues: 
 
-did my code actually add barcode font styling???
-
-why does my code dup values when powershell reads it back to me?
+did my code actually add barcode font styling??? Surprise it dont.
 
 """
 
@@ -51,11 +55,15 @@ item = []
 cl = {}
 
 """ Gui Logic """
-#Variable Space
+#Drop Down Menu
+menu_drop = [
+	['File',['Save', 'Exit']]
+	]
 
 #layout window
 
 layout = [
+	[sg.Menu(menu_drop)],
 	[sg.Text('Dusty Clerk')],
 	[sg.Text('Enter your barcode'), sg.InputText(do_not_clear=False)],
 	[sg.Text('Item Details', size=(8,1)), sg.InputText()],
@@ -73,6 +81,7 @@ while True:
 	event, values = window.read()
 	
 	if event == sg.WIN_CLOSED or event == 'Exit': 
+		
 		break
 	
 	if event == 'save':
@@ -117,10 +126,11 @@ def barcode_font(x):
 	df = x.copy()
 
 	df[['Barcode']] = 'font-family: Free 3 of 9'
+	df.style.set_properties(**{'font-family': 'Free 3 of 9'}).render
 	
 	return df
 
-df.style.apply(barcode_font, axis = None)
+df.style.set_properties(**{'font-family': 'Free 3 of 9'}).render
 
 print("style complete")
 
@@ -140,7 +150,7 @@ print("Save Complete")
 
 print("Playback enabled")
 
-reader = pd.read_excel(r'demo.xlsx')
+reader = pd.read_excel(pathname)
 
 print(reader)
 print("Playback complete")
